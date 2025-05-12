@@ -1,0 +1,13 @@
+权益证明(ProofofStake,POS)共识算法中，节点的权益值决定了其在共识
+过程中的权重。权益值通常由节点的权益年龄（StakingAge）和持有的通证数
+量(TokenAmount)共同决定。权益年龄指的是节点自开始持有通证以来的
+时间长度，通证数量则是节点持有的通证数量。权益值越高，节点在共识过程
+中的影响力越大。请完善SortPoSNodes0方法代码，给定多个节点的权益年龄
+和通证数量，请计算每个节点的权益值，并按照权益值从高到低进行排序，返
+回其排序结果，输出格式形如：NodeANodeCNodeB
+（节点信息（包含节点名称、权益年龄和通证数量）见如下结构体：
+type Node struct {
+Name string
+StakingAge int
+TokenAmount int
+}

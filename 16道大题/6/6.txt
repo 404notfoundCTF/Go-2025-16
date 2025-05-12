@@ -1,0 +1,11 @@
+在区块链系统中，签名的唯一性至关重要，以确保每个消息的真实性和完整性。假设签名仅由
+消息和nonce两部分组成，消息的发送顺序例如:message1，message2，·…,messageN,
+签名的nonce是随着消息发送次数递增的，如果使用了过期的nonce则会使得签名无效(即
+nonce发生重复)。请完善IdentifylnvalidSignatures()方法代码，给定一组消息及其对应的
+nonce，请编写代码判断其中哪个消息的签名是无效的。最终以数组形式返回无效的签名，输
+出格式形如:message1 nonce2
+签名的结构体定义为：
+type Signature struct{
+message string
+nonce string
+}
