@@ -1,0 +1,34 @@
+区块链中的区块头是区块的关键部分，它包含了前一块的哈希值以维护链的连续性，
+时间戳记录生成时间，Merkle根确保交易数据完整性，并且含有难度目标和随机数nonce，
+共同用于构建工作量证明及保障区块链的安全与一致性。
+
+ 
+
+提示：
+
+ 
+
+1.在计算哈希值时，需要先将字符串转换为字节数组，使用SHA256算法计算哈希值后，返回长度为32的字节数组。
+
+ 
+
+2.在编写go语言代码时，可使用如下的import语句导入相应的库：
+
+import (
+
+    "bytes"
+
+    "crypto/sha256"
+
+    "encoding/binary"
+
+    "time"
+
+)
+
+步骤
+1
+在本题中，你需要使用Go语言，完善blockhash.go文件里的部分方法。
+对于给定的区块头BlockHeader和它的各个字段的值，请完善CalculateBlockHash ()方法内部的实现，
+使用Go语言内置的crypto/sha256包中的SHA256哈希算法计算BlockHeader的数字指纹hash，
+作为CalculateBlockHash()的输出。
