@@ -5,13 +5,11 @@ import "fmt"
 func CountValidPBFTSystems(matrix [][2]int) int {
 	count := 0
 	//请在下方补全代码=============
-	for i := 0; i < len(matrix); i++ {
-		n := matrix[i][0]
-		fMax := matrix[i][1]
-		for f := 0; f <= fMax; f++ {
-			if 3*f+1 <= n {
-				count++
-			}
+	for _, system := range matrix {
+		n := system[0]     // 总节点数
+		fMax := system[1]  // 拜占庭节点数
+		if 3*fMax+1 <= n { // 检查 PBFT 条件
+			count++
 		}
 	}
 	//请在上方补全代码=============
