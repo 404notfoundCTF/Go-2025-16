@@ -5,7 +5,6 @@ import (
 	"sort"
 )
 
-// 将输入构造成一个切片
 func SortPoWMiners(a, b, c, d float64) (float64, float64, float64, float64) {
 	// 将输入构造成一个切片
 	hashPowers := []float64{a, b, c, d}

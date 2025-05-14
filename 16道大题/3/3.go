@@ -1,7 +1,7 @@
-package main // 声明主包
+package main
 
 import (
-	"fmt"  // 导入格式化输出包
+	"fmt"
 	"sort" // 导入排序包，用于排序操作
 )
 
@@ -11,12 +11,11 @@ type Node struct { // 定义 Node 结构体
 	TokenAmount int    // 通证数量
 }
 
-// SortPOSNodesTest(*node [3]*Node) (string, string, string)
-// 将被处理节点按为切片以便排序
 func SortPOSNodesTest(node [3]*Node) (string, string, string) {
+	// 将数组转换为切片以便排序
 	nodes := node[:]
 
-	// 首先支持节点知见：按照最低值降序排列
+	// 自定义排序规则，按权益值降序排序
 	sort.Slice(nodes, func(i, j int) bool {
 		//===========请在下方补充代码==========
 		// 计算节点权力值
@@ -26,7 +25,7 @@ func SortPOSNodesTest(node [3]*Node) (string, string, string) {
 			return valueI > valueJ
 		}
 
-		// 按照值相同的节点排序（按名称升序）
+		// 权益值相同时的次级排序（按名称升序）
 		return nodes[i].Name < nodes[j].Name
 		//===========请在上方补充代码==========
 	})
