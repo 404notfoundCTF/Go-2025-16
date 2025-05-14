@@ -1,0 +1,100 @@
+Merkle根（Merkle Root）是在计算机科学中特别是在区块链技术领域经常提及的一个概念
+它是Merkle树（Merkle Tree）的顶部节点，也就是整棵树经过一系列哈希运算后得到的最终唯一哈希值。
+Merkle树是一种特殊的数据结构，其中每个节点都是其所有子节点的哈希值的组合结果，
+通常采用哈希函数（如SHA-256）来计算。
+
+在区块链中，Merkle树被用来有效且安全地验证大规模数据集合的部分性或完整性。
+例如，在比特币网络中，每一个区块内的交易会被组织成一棵Merkle树，每笔交易被视为一个叶节点，
+然后通过两两配对、逐层向上合并计算哈希值，直到生成唯一的Merkle根。这个Merkle根随后会被纳入区块头信息中。
+
+当需要验证某笔交易是否属于特定区块时，无需提供整个区块的所有交易详情，
+仅需提供涉及这笔交易及其兄弟交易的路径上的哈希值，就可以通过重新计算到达Merkle根来验证这笔交易的真实性。
+由于哈希函数的单向性和碰撞阻力特性，只要任何底层交易数据有任何微小变化，都将导致Merkle根的变化，
+因此它可以作为区块内数据未被篡改的有效证明。
+
+
+提示：
+
+ 
+
+1.两个哈希合并生成一个哈希过程如下：
+
+//hash1和hash2都是哈希值的16进制形式
+
+hash3=sha256.Sum256([]byte(hash1+hash2)）
+
+ 
+
+2.在编写go语言代码时，可能会使用如下的import语句导入相应的库：
+
+import (
+
+   "fmt"
+
+   "github.com/ethereum/go-ethereum/crypto"
+
+)
+
+步骤
+1
+本题中，您的任务是在Go语言环境下，对generateMerkle.go文件中尚未完善的代码进行扩展和完善，
+以便针对给定的一系列简化交易记录构建并计算它们的Merkle树根。在此过程中，
+核心算法将依赖于crypto/sha256.Sum256()方法逐层执行哈希运算，从而逐步聚合生成Merkle树的顶层——即Merkle根。
+完成计算后，请务必转换此二进制形式的Merkle根为便于读取和展示的十六进制字符串格式，
+这一步骤可通过调用encoding/hex.EncodeToString()函数来实现，并确保将其作为函数的最终输出结果。
+package main
+
+import (
+	"encoding/hex" // 导入用于将字节切片编码为十六进制字符串的库
+	"fmt"         // 导入用于打印输出的库
+	"crypto/sha256" // 导入用于计算 SHA-256 哈希的库
+)
+
+func generateMerkle() string {
+	// 定义一个包含四个交易的数组，每个交易是一个十六进制字符串
+	txArray := []string{
+		"388C818CA8B9251b393131C08a736A67ccB19297", // 第一个交易的十六进制字符串
+		"a6De4892df5410F44f73d85Cb941eb3D3c7d485a", // 第二个交易的十六进制字符串
+		"d81fa16C3C04106248bC3897A0fB4Eb5B21EDBbD", // 第三个交易的十六进制字符串
+		"8a2228705ec979961F0e16df311dEbcf097A2766", // 第四个交易的十六进制字符串
+	}
+
+	// 计算第一个交易的 SHA-256 哈希值
+	hash1 := sha256.Sum256([]byte(txArray[0])) // 对第一个交易进行 SHA-256 哈希
+	h1 := hex.EncodeToString(hash1[:]) // 将第一个交易的哈希值编码为十六进制字符串
+
+	// 计算第二个交易的 SHA-256 哈希值
+	hash2 := sha256.Sum256([]byte(txArray[1])) // 对第二个交易进行 SHA-256 哈希
+	h2 := hex.EncodeToString(hash2[:]) // 将第二个交易的哈希值编码为十六进制字符串
+
+	// 计算第三个交易的 SHA-256 哈希值
+	hash3 := sha256.Sum256([]byte(txArray[2])) // 对第三个交易进行 SHA-256 哈希
+	h3 := hex.EncodeToString(hash3[:]) // 将第三个交易的哈希值编码为十六进制字符串
+
+	// 计算第四个交易的 SHA-256 哈希值
+	hash4 := sha256.Sum256([]byte(txArray[3])) // 对第四个交易进行 SHA-256 哈希
+	h4 := hex.EncodeToString(hash4[:]) // 将第四个交易的哈希值编码为十六进制字符串
+
+	// 计算哈希值 h1 和 h2 组合的 SHA-256 哈希值
+	hash12 := sha256.Sum256([]byte(h1 + h2)) // 对 h1 和 h2 组合进行 SHA-256 哈希
+	h12 := hex.EncodeToString(hash12[:]) // 将 h1 和 h2 组合的哈希值编码为十六进制字符串
+
+	// 计算哈希值 h3 和 h4 组合的 SHA-256 哈希值
+	hash34 := sha256.Sum256([]byte(h3 + h4)) // 对 h3 和 h4 组合进行 SHA-256 哈希
+	h34 := hex.EncodeToString(hash34[:]) // 将 h3 和 h4 组合的哈希值编码为十六进制字符串
+
+	// 计算哈希值 h12 和 h34 组合的 SHA-256 哈希值，得到 Merkle 根哈希
+	hash1234 := sha256.Sum256([]byte(h12 + h34)) // 对 h12 和 h34 组合进行 SHA-256 哈希，得到 Merkle 根哈希
+	h1234 := hex.EncodeToString(hash1234[:]) // 将 Merkle 根哈希编码为十六进制字符串
+
+	// 打印 Merkle 根哈希值及其十六进制编码
+	fmt.Println(h1234, hex.EncodeToString(hash1234[:])) // 输出 Merkle 根哈希值
+
+	// 返回 Merkle 根哈希值的十六进制编码
+	return h1234
+}
+
+func main() {
+	// 调用 generateMerkle 函数生成 Merkle 根哈希并打印
+	generateMerkle() // 生成并打印 Merkle 根哈希
+}

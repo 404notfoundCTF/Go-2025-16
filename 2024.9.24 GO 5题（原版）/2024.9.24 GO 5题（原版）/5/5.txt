@@ -1,0 +1,88 @@
+区块链中的区块头是区块的关键部分，它包含了前一块的哈希值以维护链的连续性，
+时间戳记录生成时间，Merkle根确保交易数据完整性，并且含有难度目标和随机数nonce，
+共同用于构建工作量证明及保障区块链的安全与一致性。
+
+ 
+
+提示：
+
+ 
+
+1.在计算哈希值时，需要先将字符串转换为字节数组，使用SHA256算法计算哈希值后，返回长度为32的字节数组。
+
+ 
+
+2.在编写go语言代码时，可使用如下的import语句导入相应的库：
+
+import (
+
+    "bytes"
+
+    "crypto/sha256"
+
+    "encoding/binary"
+
+    "time"
+
+)
+
+步骤
+1
+在本题中，你需要使用Go语言，完善blockhash.go文件里的部分方法。
+对于给定的区块头BlockHeader和它的各个字段的值，请完善CalculateBlockHash ()方法内部的实现，
+使用Go语言内置的crypto/sha256包中的SHA256哈希算法计算BlockHeader的数字指纹hash，
+作为CalculateBlockHash()的输出。
+
+
+package main
+
+import (
+	"bytes"              // 用于创建和操作字节缓冲区
+	"crypto/sha256"      // 用于计算SHA256哈希值
+	"encoding/binary"    // 用于以小端或大端方式处理二进制数据
+	"time"               // 用于处理时间相关操作
+	"fmt"                // 用于格式化和打印输出
+)
+
+type BlockHeader struct {
+	Version       uint64    // 区块版本
+	PrevBlockHash []byte    // 前一区块的哈希
+	MerkleRoot    []byte    // 该区块的默克尔根
+	Timestamp     time.Time // 区块的时间戳
+	Nonce         uint64    // 区块的工作量证明Nonce
+}
+
+const (
+	fixedTimestamp int64 = 1614363477 // 固定的时间戳值
+)
+
+func CalculateBlockHash() [32]byte {
+	header := BlockHeader{
+		Version:       1, // 区块版本号设为1
+		PrevBlockHash: []byte{111, 205, 99, 52, 176, 155, 165, 121, 152, 53, 180, 205, 245, 121, 207, 182, 147, 128, 55, 178, 224, 247, 64, 123, 3, 79, 198, 60, 73, 145, 68, 87}, // 假设的前一区块哈希
+		MerkleRoot:    []byte{0, 5, 124, 54, 190, 235, 71, 37, 145, 71, 158, 247, 39, 193, 43, 216, 235, 145, 122, 97, 161, 184, 169, 152, 126, 149, 45, 191, 248, 59, 251, 149}, // 假设的默克尔根
+		Timestamp:     time.Unix(fixedTimestamp, 0), // 使用固定的时间戳创建时间对象
+		Nonce:         67890, // 假设的工作量证明值Nonce
+	}
+
+	buf := new(bytes.Buffer) // 创建一个新的字节缓冲区，用于存储区块头信息
+	// 在此处补充代码
+	// Version需要用小端形式放入buf中
+	binary.Write(buf, binary.LittleEndian, header.Version) // 将Version按照小端序写入缓冲区
+
+	buf.Write(header.PrevBlockHash) // 将前一个区块的哈希值写入缓冲区
+	buf.Write(header.MerkleRoot)    // 将默克尔根写入缓冲区
+	binary.Write(buf, binary.LittleEndian, header.Timestamp.Unix()) // 将时间戳以小端序写入缓冲区
+	binary.Write(buf, binary.LittleEndian, header.Nonce)            // 将Nonce值以小端序写入缓冲区
+
+	hash := sha256.Sum256(buf.Bytes()) // 计算缓冲区数据的SHA256哈希值
+
+	fmt.Println("buf:", buf.Bytes()) // 输出缓冲区内容
+
+	return hash // 返回哈希值
+}
+
+// 调用
+func main() {
+	fmt.Print("hash:", CalculateBlockHash()) // 计算并输出区块的哈希值
+}

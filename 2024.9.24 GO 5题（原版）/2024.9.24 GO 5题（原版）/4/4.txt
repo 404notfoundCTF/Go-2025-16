@@ -1,0 +1,39 @@
+在区块链特别是比特币和以太坊等加密货币系统中，
+Merkle树（也称为哈希树）被用来高效地验证区块内交易的完整性。
+Merkle树是一种二叉树数据结构，它的主要特点是对底层数据集合执行分层哈希计算，
+最终生成一个顶层的单一哈希值——Merkle根哈希。
+
+ 
+
+提示：
+
+ 
+
+1.计算过程中用到的哈希函数为sha256.Sum256()，两个哈希合并生成一个哈希过程如下：
+
+//hash1和hash2都是哈希值的16进制的string形式。
+
+hash3=sha256.Sum256([]byte(hash1+hash2)）
+
+ 
+
+2.如下图所示，交易tx1的merkle证明为hash2和hash34。
+
+
+
+ 
+
+3.在编写go语言代码时，可能会使用如下的import语句导入相应的库：
+
+import (
+    "crypto/sha256"
+    "encoding/hex"
+    "fmt"
+)
+
+步骤
+1
+在本题中你需要使用Go语言，完善generateMerkleProof.go文件里的部分代码，
+实现以下任务：给定一组简化的交易，计算其中指定的某笔交易的merkle证明，
+并将merkle证明返回。计算过程中用到的哈希函数为sha256.Sum256()，
+用hex.EncodeToString()将每个哈希值转为string形式。

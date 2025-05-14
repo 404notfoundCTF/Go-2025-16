@@ -1,0 +1,84 @@
+在区块链技术中，nonce（通常表示为一次性数字）是一个用于满足特定条件的可变参数，
+尤其在工作量证明（Proof-of-Work, PoW）的区块链系统（如比特币）中有非常重要的
+用途，在PoW挖矿过程中，区块头中包含了一个nonce字段。矿工们不断尝试改变这个nonce值，
+并对包含nonce的区块header进行哈希运算。目标是找到一个nonce值，
+使得区块header的哈希值小于或等于当前网络设定的难度目标值（target）。
+
+ 
+
+ 提示：
+
+ 
+
+1.哈希值满足难度值target，即哈希值的前导零个数大于或等于target的值。
+
+ 
+
+2.在编写go语言代码时，可使用如下的import语句导入相应的库：
+
+import (
+
+    "crypto/sha256"
+
+    "encoding/hex"
+
+    "fmt"
+
+    "strings"
+
+)
+
+ 
+
+ 
+
+ 
+
+步骤
+1
+在本题中，你的任务是，在Go语言编程环境中，
+面对给定的string类型变量data以及期望达到的目标难度阈值target，
+你需要在calculateNonce.go文件中补充实现相关代码逻辑，
+以计算并返回满足特定条件的最小nonce值。具体来说，该函数应从整数值30000开始，
+逐渐递增nonce，并将每一次递增后的nonce与data结合，
+通过哈希函数运算获取对应的哈希值（以16进制字符串形式呈现）。
+此过程将持续进行，直至找到这样一个nonce值，
+使得基于此nonce计算得到的哈希值符合预先设定的难度目标target为止。
+
+package main
+
+import (
+	"crypto/sha256"  // 导入用于生成SHA-256哈希的包
+	"encoding/hex"   // 导入用于十六进制编码的包
+	"fmt"            // 导入用于格式化I/O的包
+	"strings"        // 导入用于字符串操作的包
+)
+
+func CalculateNonce() int {
+	data := "AK1r7dWdlxRiyyUfDyQB3Gb1KRCAAA3RyZaXtw"  // 定义用于哈希的数据
+	target := 3                                    // 设定目标前缀中0的数量
+	//在此处补充代码
+	prefix := strings.Repeat("0", target)          // 创建目标前缀，例如"000"，strings.Repeat 用于将某个字符串重复指定的次数，并返回拼接后的结果。
+	nonce := 30000                                 // 初始化nonce为30000
+	//结束
+
+	for {
+		hashData := fmt.Sprintf("%s%d", data, nonce)  // 将数据和nonce拼接成字符串
+		fmt.Println(hashData)                         // 打印哈希前的数据
+		fmt.Println([]byte(hashData))                 // 打印数据的字节数组形式
+		hash := sha256.Sum256([]byte(hashData))       // 生成SHA-256哈希
+		fmt.Println(hash)                             // 打印哈希值
+		hexHash := hex.EncodeToString(hash[:])        // 将哈希值转换为十六进制字符串
+
+		if hexHash[:target] == prefix {               // 判断哈希值的前n位是否等于目标前缀
+			break                                    // 如果满足条件，跳出循环
+		}
+		nonce++                                      // 增加nonce并继续尝试
+	}
+	return nonce                                    // 返回找到的nonce值
+}
+
+// 执行
+func main() {
+	CalculateNonce()  // 调用CalculateNonce函数
+}
